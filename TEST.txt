@@ -1,0 +1,55 @@
+
+---------------------------------------------------------
+PM> install-package Microsoft.AspNet.OData -version 5.6.0
+---------------------------------------------------------
+Source :                 https://damienbod.com/2014/06/10/getting-started-with-web-api-and-odata-v4/
+OData Filter Expression: https://msdn.microsoft.com/en-us/library/hh169248(v=nav.90).aspx
+
+http://localhost:1329/odata?$metadata
+{
+  "@odata.context":"http://localhost:1329/odata/$metadata","value":[
+    {
+      "name":"People","kind":"EntitySet","url":"People"
+    },{
+      "name":"Trips","kind":"EntitySet","url":"Trips"
+    }
+  ]
+}
+
+http://localhost:1329/odata/People?$select=Name
+{
+  "@odata.context":"http://localhost:1329/odata/$metadata#People","value":[
+    {
+      "ID":"001","Name":"Angel","Description":null
+    },{
+      "ID":"002","Name":"Clyde","Description":"Contrary to popular belief, Lorem Ipsum is not simply random text."
+    },{
+      "ID":"003","Name":"Elaine","Description":"It has roots in a piece of classical Latin literature from 45 BC, making Lorems over 2000 years old."
+    }
+  ]
+}
+http://localhost:1329/odata/People?$select=Name,Description
+{
+  "@odata.context":"http://localhost:1329/odata/$metadata#People","value":[
+    {
+      "ID":"001","Name":"Angel","Description":null
+    },{
+      "ID":"002","Name":"Clyde","Description":"Contrary to popular belief, Lorem Ipsum is not simply random text."
+    },{
+      "ID":"003","Name":"Elaine","Description":"It has roots in a piece of classical Latin literature from 45 BC, making Lorems over 2000 years old."
+    }
+  ]
+}
+http://localhost:1329/odata/People?$select=Name,Description&$top=1      --> working
+http://localhost:1329/odata/People?$top=1                               --> working
+http://localhost:1329/odata/People?$top=2&$skip=1&$orderby=ID desc      --> working
+http://localhost:1329/odata/People?$filter=ID lt '003'                  --> working
+http://localhost:1329/odata/People?$filter=ID eq '003'                  --> working
+http://localhost:1329/odata/People?$filter=startswith(Name,'C')         --> working
+http://localhost:1329/odata/People?$filter=indexof(Name,'lyde') gt 0    --> working
+http://localhost:1329/odata/People?$orderby=Name desc                   --> working
+
+http://localhost:1329/odata/People?$filter=contains(Name,'Angel')       --> not working
+
+http://odata.netflix.com/v2/Catalog/Titles?$top=5&$skip=1
+
